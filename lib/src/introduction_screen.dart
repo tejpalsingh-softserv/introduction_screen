@@ -198,11 +198,12 @@ class IntroductionScreen extends StatefulWidget {
     this.pagesAxis = Axis.horizontal,
     this.scrollPhysics = const BouncingScrollPhysics(),
     this.rtl = false,
-  })  : assert(pages != null || rawPages != null),
+  })
+      : assert(pages != null || rawPages != null),
         assert(
-          (pages != null && pages.length > 0) ||
-              (rawPages != null && rawPages.length > 0),
-          "You provide at least one page on introduction screen !",
+        (pages != null && pages.length > 0) ||
+            (rawPages != null && rawPages.length > 0),
+        "You provide at least one page on introduction screen !",
         ),
         assert(!showDoneButton || (done != null && onDone != null)),
         assert((showSkipButton && skip != null) || !showSkipButton),
@@ -323,13 +324,14 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                     : widget.scrollPhysics,
                 children: widget.pages != null
                     ? widget.pages!
-                        .map((p) => IntroPage(
-                              page: p,
-                              scrollController: widget.scrollController,
-                              isTopSafeArea: widget.isTopSafeArea,
-                              isBottomSafeArea: widget.isBottomSafeArea,
-                            ))
-                        .toList()
+                    .map((p) =>
+                    IntroPage(
+                      page: p,
+                      scrollController: widget.scrollController,
+                      isTopSafeArea: widget.isTopSafeArea,
+                      isBottomSafeArea: widget.isBottomSafeArea,
+                    ))
+                    .toList()
                     : widget.rawPages!,
               ),
             ),
@@ -357,28 +359,34 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                         flex: widget.skipFlex,
                         child: _toggleBtn(skipBtn, isSkipBtn),
                       ),
-                      Expanded(
-                        flex: widget.dotsFlex,
-                        child: Center(
-                          child: widget.isProgress
-                              ? DotsIndicator(
-                                  reversed: widget.rtl,
-                                  dotsCount: getPagesLength(),
-                                  position: _currentPage,
-                                  decorator: widget.dotsDecorator,
-                                  onTap: widget.isProgressTap && !widget.freeze
-                                      ? (pos) => animateScroll(pos.toInt())
-                                      : null,
-                                )
-                              : const SizedBox(),
-                        ),
-                      ),
+//todo : made changes here implemnt on git
+
+                      Visibility(
+                        visible: !isLastPage,
+                        child: Expanded(
+                          flex: widget.dotsFlex,
+                          child: Center(
+                            child: widget.isProgress
+                                ? DotsIndicator(
+                              reversed: widget.rtl,
+                              dotsCount: getPagesLength(),
+                              position: _currentPage,
+                              decorator: widget.dotsDecorator,
+                              onTap: widget.isProgressTap && !widget.freeze
+                                  ? (pos) => animateScroll(pos.toInt())
+                                  : null,
+                            )
+                                : const SizedBox(),
+                          ),
+                        ),),
                       Expanded(
                         flex: widget.nextFlex,
                         child: isLastPage
                             ? _toggleBtn(doneBtn, widget.showDoneButton)
                             : _toggleBtn(nextBtn, widget.showNextButton),
                       ),
+
+
                     ].asReversed(widget.rtl),
                   ),
                 ),
